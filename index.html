@@ -3,269 +3,81 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Jordan Rice · Voice Audio Engineering</title>
+<title>Jordan Rice · Audio Engineering Portfolio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,700..800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --paper: #E9EDEE;
-    --panel: #F7F9F9;
-    --ink: #142130;
-    --muted: #556270;
-    --rule: #C3CCD1;
-    --teal: #0E5A66;
-    --amber: #D98A1C;
+    --paper: #E9EDEE; --panel: #F7F9F9; --ink: #142130; --muted: #556270;
+    --rule: #C3CCD1; --teal: #0E5A66;
     --display: "Archivo", "Arial Narrow", Arial, sans-serif;
     --body: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
   }
   * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body { margin: 0; background: var(--paper); color: var(--ink); font: 400 17px/1.6 var(--body); }
-  a { color: var(--teal); }
-  a:focus-visible, button:focus-visible, audio:focus-visible, video:focus-visible { outline: 3px solid var(--amber); outline-offset: 3px; }
-  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
-
-  /* Hero */
-  header.hero { padding: 72px 0 40px; border-bottom: 1px solid var(--rule); }
-  .hero h1 {
-    font-family: var(--display); font-variation-settings: "wdth" 66; font-weight: 800;
-    font-size: clamp(3rem, 9vw, 6.5rem); line-height: .92; letter-spacing: -.01em; margin: 0 0 24px; max-width: 12ch;
-  }
-  .hero p { max-width: 60ch; margin: 0 0 12px; color: var(--muted); font-size: 1.1rem; }
-  .hero nav { display: flex; flex-wrap: wrap; gap: 10px 22px; margin-top: 28px; font-weight: 500; }
-
-  /* Signal chain: the one memorable element */
-  .chain { padding: 48px 0 56px; border-bottom: 1px solid var(--rule); }
-  .chain h2, section h2 {
-    font-family: var(--display); font-variation-settings: "wdth" 80; font-weight: 700;
-    font-size: clamp(1.8rem, 4vw, 2.6rem); line-height: 1.05; margin: 0 0 10px;
-  }
-  .lead { max-width: 64ch; color: var(--muted); margin: 0 0 32px; }
-  .rack { list-style: none; margin: 0; padding: 0; display: flex; gap: 0; overflow-x: auto; padding-bottom: 8px; }
-  .module {
-    flex: 1 0 170px; position: relative; background: var(--ink); color: var(--paper);
-    padding: 18px 16px 20px; border-left: 4px solid var(--teal); min-height: 190px;
-  }
-  .module + .module { margin-left: 28px; }
-  .module + .module::before {
-    content: ""; position: absolute; left: -32px; top: 46px; width: 28px; height: 4px; background: var(--amber);
-  }
-  .module .step { font-family: var(--display); font-variation-settings: "wdth" 62; font-size: 2.4rem; font-weight: 800; color: var(--amber); line-height: 1; }
-  .module h3 { font: 600 1rem/1.3 var(--body); margin: 10px 0 6px; }
-  .module p { margin: 0; font-size: .88rem; line-height: 1.45; color: #C9D3DA; }
-  .edit-note { font-size: .85rem; color: var(--muted); margin-top: 14px; }
-
-  section { padding: 56px 0; border-bottom: 1px solid var(--rule); }
-
-  /* Before / after rows */
-  .compare { display: grid; gap: 28px; }
-  .example { background: var(--panel); border: 1px solid var(--rule); padding: 22px; }
-  .example h3 { font: 600 1.15rem/1.3 var(--body); margin: 0 0 4px; }
-  .example > p { margin: 0 0 18px; color: var(--muted); font-size: .95rem; max-width: 70ch; }
-  .tracks { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
-  .track { border-top: 3px solid var(--rule); padding-top: 10px; }
-  .track.final { border-top-color: var(--teal); }
-  .track h4 { margin: 0 0 8px; font: 600 .95rem/1.3 var(--body); }
-
-  /* Media slots */
-  .slot audio, .slot video { width: 100%; display: block; }
-  .slot video { aspect-ratio: 16 / 9; background: var(--ink); }
-  .slot .drop {
-    display: none; border: 2px dashed var(--rule); padding: 14px; font-size: .85rem; color: var(--muted); background: var(--paper);
-  }
-  .slot .drop code { color: var(--ink); font-weight: 600; word-break: break-all; }
-  .slot.missing audio, .slot.missing video { display: none; }
-  .slot.missing .drop { display: block; }
-  .slot.video-slot.missing .drop { aspect-ratio: 16 / 9; display: flex; align-items: center; justify-content: center; text-align: center; }
-
-  /* Settings table */
-  .table-wrap { overflow-x: auto; }
-  table { border-collapse: collapse; width: 100%; min-width: 640px; background: var(--panel); }
-  th, td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--rule); vertical-align: top; font-size: .95rem; }
-  th { font-weight: 600; background: var(--ink); color: var(--paper); }
-  td.audio-cell { min-width: 240px; }
-
-  .videos { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
-  .videos figure { margin: 0; }
-  .videos figcaption { margin-top: 10px; font-size: .95rem; color: var(--muted); }
-  .videos figcaption strong { color: var(--ink); }
-
-  footer { padding: 48px 0 64px; }
-  footer p { margin: 0 0 8px; }
-  .consent { font-size: .9rem; color: var(--muted); max-width: 70ch; margin-top: 20px; }
-
-  @media (max-width: 640px) {
-    header.hero { padding-top: 48px; }
-    .module { flex-basis: 150px; }
-  }
-  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 17px/1.6 var(--body); }
+  main { max-width: 880px; margin: 0 auto; padding: 64px 20px 80px; }
+  h1 { font: 800 clamp(40px, 8vw, 72px)/0.95 var(--display); font-stretch: 75%; margin: 0 0 20px; letter-spacing: -0.01em; }
+  h2 { font: 700 28px/1.1 var(--display); font-stretch: 80%; margin: 0 0 6px; }
+  .lede { color: var(--muted); max-width: 620px; margin: 0; }
+  section { border-top: 1px solid var(--rule); padding: 44px 0 8px; margin-top: 44px; }
+  .num { font: 600 13px var(--body); letter-spacing: .08em; text-transform: uppercase; color: var(--teal); margin-bottom: 8px; }
+  .desc { color: var(--muted); margin: 0 0 20px; max-width: 640px; }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .card { background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; padding: 16px; }
+  .label { font-weight: 600; font-size: 14px; margin-bottom: 10px; }
+  .label span { color: var(--muted); font-weight: 400; }
+  audio { width: 100%; }
+  video, iframe { width: 100%; aspect-ratio: 16/9; border: 0; border-radius: 8px; background: #000; display: block; }
+  .stack > .card + .card { margin-top: 16px; }
+  a { color: var(--teal); font-weight: 600; }
+  footer { border-top: 1px solid var(--rule); margin-top: 56px; padding-top: 24px; color: var(--muted); font-size: 15px; }
+  @media (max-width: 640px) { .pair { grid-template-columns: 1fr; } main { padding-top: 40px; } }
 </style>
 </head>
 <body>
-
-<header class="hero">
-  <div class="wrap">
-    <h1>Clean voices in. Better voices out.</h1>
-    <p>I'm Jordan Rice, an audio engineer and producer in Columbus, Ohio. I prepare spoken-word audio for ElevenLabs voices and Adobe Speech Enhance, and I mix podcasts, talking-head video, studio vocals, and live audio.</p>
-    <p>Every example below is my own voice or used with permission. Listen in order: raw, cleaned, then the generated result.</p>
-    <nav aria-label="Sections">
-      <a href="#prep">Voice prep examples</a>
-      <a href="#mistakes">What over-processing does</a>
-      <a href="#settings">Settings study</a>
-      <a href="#video">Video work</a>
-      <a href="#contact">Contact</a>
-    </nav>
-  </div>
-</header>
-
-<div class="chain">
-  <div class="wrap">
-    <h2>My voice prep chain</h2>
-    <p class="lead">The order matters. Each stage fixes one problem without creating a new one for the next stage, or for the voice model.</p>
-    <ol class="rack">
-      <li class="module"><div class="step">1</div><h3>Assess</h3><p>Check noise floor, room tone, peaks, and consistency across takes before touching anything.</p></li>
-      <li class="module"><div class="step">2</div><h3>Repair</h3><p>iZotope RX: de-click, de-plosive, and remove isolated noises.</p></li>
-      <li class="module"><div class="step">3</div><h3>Reduce</h3><p>Light noise reduction and de-reverb, stopping before artifacts appear.</p></li>
-      <li class="module"><div class="step">4</div><h3>Shape</h3><p>Waves EQ and de-esser to control harshness while keeping natural tone.</p></li>
-      <li class="module"><div class="step">5</div><h3>Level</h3><p>Gentle compression and loudness matching so every file sits at the same level.</p></li>
-      <li class="module"><div class="step">6</div><h3>Generate</h3><p>Build the ElevenLabs voice or run Speech Enhance, then review against the source.</p></li>
-    </ol>
-    <p class="edit-note">Edit these six steps to match your exact plugins and settings.</p>
-  </div>
-</div>
-
 <main>
-  <section id="prep">
-    <div class="wrap">
-      <h2>Voice prep examples</h2>
-      <p class="lead">Each example follows one recording through the chain above.</p>
-      <div class="compare">
+  <h1>Jordan Rice<br>Audio Engineer</h1>
+  <p class="lede">Producer and engineer in Columbus, OH. I clean up spoken-word audio, mix podcasts and talking-head video, and run live production. Use headphones for the best comparison.</p>
 
-        <article class="example">
-          <h3>Example 1: Untreated home office</h3>
-          <p>Describe the problem: room echo, computer fan hum, inconsistent levels. Then say what you fixed and why.</p>
-          <div class="tracks">
-            <div class="track"><h4>Raw recording</h4>
-              <div class="slot"><audio controls preload="none" src="audio/prep/example1-raw.mp3"></audio><div class="drop">Add <code>audio/prep/example1-raw.mp3</code></div></div></div>
-            <div class="track"><h4>Cleaned</h4>
-              <div class="slot"><audio controls preload="none" src="audio/prep/example1-clean.mp3"></audio><div class="drop">Add <code>audio/prep/example1-clean.mp3</code></div></div></div>
-            <div class="track final"><h4>ElevenLabs voice output</h4>
-              <div class="slot"><audio controls preload="none" src="audio/prep/example1-elevenlabs.mp3"></audio><div class="drop">Add <code>audio/prep/example1-elevenlabs.mp3</code></div></div></div>
-          </div>
-        </article>
-
-        <article class="example">
-          <h3>Example 2: Lav mic with clothing rustle</h3>
-          <p>Describe the problem and your fix.</p>
-          <div class="tracks">
-            <div class="track"><h4>Raw recording</h4>
-              <div class="slot"><audio controls preload="none" src="audio/prep/example2-raw.mp3"></audio><div class="drop">Add <code>audio/prep/example2-raw.mp3</code></div></div></div>
-            <div class="track"><h4>Cleaned</h4>
-              <div class="slot"><audio controls preload="none" src="audio/prep/example2-clean.mp3"></audio><div class="drop">Add <code>audio/prep/example2-clean.mp3</code></div></div></div>
-            <div class="track final"><h4>Adobe Speech Enhance output</h4>
-              <div class="slot"><audio controls preload="none" src="audio/prep/example2-enhanced.mp3"></audio><div class="drop">Add <code>audio/prep/example2-enhanced.mp3</code></div></div></div>
-          </div>
-        </article>
-
-        <article class="example">
-          <h3>Example 3: Studio vocal booth (SM7B)</h3>
-          <p>A clean baseline: what a well-recorded source produces with minimal processing.</p>
-          <div class="tracks">
-            <div class="track"><h4>Raw recording</h4>
-              <div class="slot"><audio controls preload="none" src="audio/prep/example3-raw.mp3"></audio><div class="drop">Add <code>audio/prep/example3-raw.mp3</code></div></div></div>
-            <div class="track"><h4>Cleaned</h4>
-              <div class="slot"><audio controls preload="none" src="audio/prep/example3-clean.mp3"></audio><div class="drop">Add <code>audio/prep/example3-clean.mp3</code></div></div></div>
-            <div class="track final"><h4>ElevenLabs voice output</h4>
-              <div class="slot"><audio controls preload="none" src="audio/prep/example3-elevenlabs.mp3"></audio><div class="drop">Add <code>audio/prep/example3-elevenlabs.mp3</code></div></div></div>
-          </div>
-        </article>
-
-      </div>
+  <section id="cleanup">
+    <div class="num">01 · Cleanup</div>
+    <h2>Problem audio, repaired</h2>
+    <p class="desc">The same podcast recording before and after my cleanup chain.</p>
+    <div class="pair">
+      <div class="card"><div class="label">Before <span>· raw recording</span></div><audio controls preload="metadata" src="cleanup-before.mp3"></audio></div>
+      <div class="card"><div class="label">After <span>· cleaned</span></div><audio controls preload="metadata" src="cleanup-after.mp3"></audio></div>
     </div>
   </section>
 
-  <section id="mistakes">
-    <div class="wrap">
-      <h2>What over-processing does</h2>
-      <p class="lead">A voice model learns artifacts as if they were part of the voice. Here is the same source cleaned well and cleaned too hard, and what each produces.</p>
-      <article class="example">
-        <h3>Same source, two levels of noise reduction</h3>
-        <p>Explain what to listen for: warbling, a hollow or underwater tone, and lost breaths and consonants.</p>
-        <div class="tracks">
-          <div class="track"><h4>Over-processed source</h4>
-            <div class="slot"><audio controls preload="none" src="audio/dont/overprocessed-source.mp3"></audio><div class="drop">Add <code>audio/dont/overprocessed-source.mp3</code></div></div></div>
-          <div class="track"><h4>Voice built from it</h4>
-            <div class="slot"><audio controls preload="none" src="audio/dont/overprocessed-output.mp3"></audio><div class="drop">Add <code>audio/dont/overprocessed-output.mp3</code></div></div></div>
-          <div class="track final"><h4>Voice built from a light clean</h4>
-            <div class="slot"><audio controls preload="none" src="audio/dont/light-clean-output.mp3"></audio><div class="drop">Add <code>audio/dont/light-clean-output.mp3</code></div></div></div>
-        </div>
-      </article>
+  <section id="field">
+    <div class="num">02 · Field to finished</div>
+    <h2>Field audio to finished video</h2>
+    <p class="desc">Unedited audio straight from a talking-head shoot, then the finished video with the dialogue edited, mixed, and speech-enhanced.</p>
+    <div class="stack">
+      <div class="card"><div class="label">Field audio <span>· unedited</span></div><audio controls preload="metadata" src="field-audio-raw.m4a"></audio></div>
+      <div class="card"><div class="label">Final video <span>· speech-enhanced</span></div><video controls preload="metadata" playsinline src="talking-head-final.mp4"></video></div>
     </div>
   </section>
 
-  <section id="settings">
-    <div class="wrap">
-      <h2>Settings study</h2>
-      <p class="lead">One script and one voice, with one setting changed at a time. Write your settings and notes in each row after you listen.</p>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Change</th><th>Settings</th><th>What I heard</th><th>Listen</th></tr></thead>
-          <tbody>
-            <tr><td>Baseline</td><td>Stability 50, Similarity 75, Style 0</td><td>Your notes</td>
-              <td class="audio-cell"><div class="slot"><audio controls preload="none" src="audio/settings/baseline.mp3"></audio><div class="drop">Add <code>audio/settings/baseline.mp3</code></div></div></td></tr>
-            <tr><td>Low stability</td><td>Stability 25</td><td>Your notes</td>
-              <td class="audio-cell"><div class="slot"><audio controls preload="none" src="audio/settings/low-stability.mp3"></audio><div class="drop">Add <code>audio/settings/low-stability.mp3</code></div></div></td></tr>
-            <tr><td>High stability</td><td>Stability 85</td><td>Your notes</td>
-              <td class="audio-cell"><div class="slot"><audio controls preload="none" src="audio/settings/high-stability.mp3"></audio><div class="drop">Add <code>audio/settings/high-stability.mp3</code></div></div></td></tr>
-            <tr><td>High similarity, noisy source</td><td>Similarity 95</td><td>Your notes</td>
-              <td class="audio-cell"><div class="slot"><audio controls preload="none" src="audio/settings/high-similarity.mp3"></audio><div class="drop">Add <code>audio/settings/high-similarity.mp3</code></div></div></td></tr>
-            <tr><td>Style exaggeration</td><td>Style 60</td><td>Your notes</td>
-              <td class="audio-cell"><div class="slot"><audio controls preload="none" src="audio/settings/style.mp3"></audio><div class="drop">Add <code>audio/settings/style.mp3</code></div></div></td></tr>
-            <tr><td>Text shaping</td><td>Punctuation, pauses, audio tags</td><td>Your notes</td>
-              <td class="audio-cell"><div class="slot"><audio controls preload="none" src="audio/settings/text-shaping.mp3"></audio><div class="drop">Add <code>audio/settings/text-shaping.mp3</code></div></div></td></tr>
-          </tbody>
-        </table>
-      </div>
+  <section id="podcast">
+    <div class="num">03 · Podcast</div>
+    <h2>A podcast I produce</h2>
+    <p class="desc">A clip from a show I record, edit, and mix.</p>
+    <div class="card"><video controls preload="metadata" playsinline src="podcast-clip.mp4"></video></div>
+  </section>
+
+  <section id="breakdown">
+    <div class="num">04 · Breakdown</div>
+    <h2>Production breakdown</h2>
+    <p class="desc">A walkthrough of how I approach a production, step by step.</p>
+    <div class="card">
+      <iframe src="https://www.youtube-nocookie.com/embed/Afi3TLiGfqQ" title="Production breakdown" loading="lazy" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <p style="margin:12px 0 0"><a href="https://www.youtube.com/watch?v=Afi3TLiGfqQ">Watch on YouTube →</a></p>
     </div>
   </section>
 
-  <section id="video">
-    <div class="wrap">
-      <h2>Video work</h2>
-      <p class="lead">Podcast and talking-head projects where I handled the dialogue mix.</p>
-      <div class="videos">
-        <figure>
-          <div class="slot video-slot"><video controls preload="none" src="video/podcast-sample.mp4"></video><div class="drop">Add <code>video/podcast-sample.mp4</code></div></div>
-          <figcaption><strong>Podcast episode excerpt.</strong> Describe the setup: number of speakers, mics, and what you did in the mix.</figcaption>
-        </figure>
-        <figure>
-          <div class="slot video-slot"><video controls preload="none" src="video/talking-head-sample.mp4"></video><div class="drop">Add <code>video/talking-head-sample.mp4</code></div></div>
-          <figcaption><strong>Talking-head video.</strong> Describe the lav setup, the room, and the cleanup.</figcaption>
-        </figure>
-      </div>
-    </div>
-  </section>
+  <footer>Contact: <a href="mailto:ricemjordan@gmail.com">ricemjordan@gmail.com</a> · <a href="https://github.com/ricemjordan">GitHub</a></footer>
 </main>
-
-<footer id="contact">
-  <div class="wrap">
-    <p><strong>Jordan Rice</strong>, audio engineer, Columbus, OH</p>
-    <p><a href="mailto:ricemjordan@gmail.com">ricemjordan@gmail.com</a></p>
-    <p class="consent">All voices on this page are my own or used with the speaker's written permission. I don't clone or publish anyone's voice without consent.</p>
-  </div>
-</footer>
-
-<script>
-  // Show a labeled drop zone for any media file that hasn't been added yet.
-  document.querySelectorAll('.slot').forEach(function (slot) {
-    var media = slot.querySelector('audio, video');
-    if (!media) return;
-    var src = media.getAttribute('src');
-    fetch(src, { method: 'HEAD' })
-      .then(function (r) { if (!r.ok) slot.classList.add('missing'); })
-      .catch(function () { slot.classList.add('missing'); });
-  });
-</script>
 </body>
 </html>
